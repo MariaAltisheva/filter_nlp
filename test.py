@@ -65,6 +65,7 @@ for row in cur:
 
     count += 1
 print(dict_)
+#
 
 
 # Закрытие соединения с базой данных
