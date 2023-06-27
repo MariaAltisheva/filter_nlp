@@ -12,29 +12,29 @@ cur = conn.cursor()
 
 # Выполнение запроса
 cur.execute("SELECT text FROM message_2")
-count = 0
+count = 1
 # Обработка результатов
 dict_ = {}
+list_ = []
 # while True:
 for row in cur:
     # print(row)
     dict_[count] = {}
     string = ''.join(row)
     string = string.lower()
-    city_list_detect = string.split(' ')
+    city_list_detect = string.split(' ' or '-')
     # print(city_list_detect)
     for c in city_list_detect:
         # print(c.lower())
         for c2 in list_city:
             if c.find(c2) >= 0:
-                # print(c2)
+                # print(c2, c)
                 dict_[count]['departure_city'] = c2
-                index_city_1 = string.index(c)
                 break
-            # print((index_city_1))
-            # else:
-            #     dict_[count]['departure_city'] = None
-
+            else:
+                dict_[count]['departure_city'] = None
+        if dict_[count]['departure_city']:
+            break
 
     for i in list_type_auto:
         if i in string:
@@ -42,7 +42,6 @@ for row in cur:
             break
         else:
             dict_[count]['type_auto'] = None
-            # print(dict_)
 
     for j in list_type_cargo:
         if j in string:
@@ -63,15 +62,17 @@ for row in cur:
         else:
             dict_[count]['currency'] = None
 
+    values_list = tuple(dict_[count].values())
+    list_.append(values_list)
     count += 1
-print(dict_)
-#
+
+print(list_)
 
 
 # Закрытие соединения с базой данных
+conn.commit()
 conn.close()
+
 finish_time = datetime.datetime.now()
 
 print(finish_time - start_time)
-
-#
