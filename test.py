@@ -22,7 +22,7 @@ list_spam = []
 for row in cur:
     # print(row)
     dict_[count] = {}
-    dict_[count]['id'] = count
+    # dict_[count]['id'] = count
     dict_[count]['departure_city'] = None
     dict_[count]['destination_city'] = None
     dict_[count]['type_auto'] = None
@@ -63,10 +63,11 @@ for row in cur:
                 dict_[count]['departure_city'] = None
         if dict_[count]['departure_city']:
             break
-        else:
-            list_spam.append(row)
-            break
-    try:
+        # else:
+        #     list_spam.append(row)
+        #     break
+    # try:
+    if dict_[count]['departure_city']:
         index_c = city_list_detect.index(dict_[count]['departure_city'])
         # print(index_c)
         for h in range(index_c + 1, len(city_list_detect)):
@@ -76,9 +77,12 @@ for row in cur:
                     break
             if dict_[count]['destination_city']:
                 break
+    else:
+        list_spam.append(row)
 
-    except:
-        continue
+    # except:
+    #     print('что то не так')
+    #     continue
 
 
     for i in list_type_auto:
@@ -112,19 +116,20 @@ for row in cur:
     match = re.search(pattern, string)
     if match:
         dict_[count]['phone_num'] = match.group()
-    values_list = tuple(dict_[count].values())
-    list_.append(values_list)
 
-    # if values_list == (count, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None):
+    if dict_[count]['departure_city'] != None:
+        values_list = tuple(dict_[count].values())
+        list_.append(values_list)
+
+    # if dict_[count]['departure_city'] == None:
     #     list_spam.append(row)
-
 
 
     count += 1
 
 
-
-# print(list_)
+# print(list_spam)
+print(list_)
 # print(list_spam)
 
 # Закрытие соединения с базой данных
