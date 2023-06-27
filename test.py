@@ -20,6 +20,27 @@ list_ = []
 for row in cur:
     # print(row)
     dict_[count] = {}
+    dict_[count]['id'] = count
+    dict_[count]['departure_city'] = None
+    dict_[count]['destination_city'] = None
+    dict_[count]['type_auto'] = None
+    dict_[count]['type_cargo'] = None
+    dict_[count]['tonnage'] = None
+    dict_[count]['stops'] = None
+    dict_[count]['prepayment'] = None
+    dict_[count]['currency'] = None
+    dict_[count]['mode_transportation'] = None
+    dict_[count]['type_load'] = None
+    dict_[count]['data_load'] = None
+    dict_[count]['temperature_regime'] = None
+    dict_[count]['cargo_readiness'] = None
+    dict_[count]['table_processing'] = None
+    dict_[count]['_id'] = None
+    dict_[count]['userid'] = None
+    dict_[count]['data'] = None
+    dict_[count]['phone_num'] = None
+    dict_[count]['email'] = None
+    dict_[count]['cargo_danger'] = None
     string = ''.join(row)
     string = string.lower()
     city_list_detect = string.split(' ' or '-')
@@ -51,10 +72,10 @@ for row in cur:
             dict_[count]['type_cargo'] = None
     for k in list_payment:
         if k in string:
-            dict_[count]['premayment'] = k
+            dict_[count]['prepayment'] = k
             break
         else:
-            dict_[count]['premayment'] = None
+            dict_[count]['prepayment'] = None
     for p in valuta:
         if p in string:
             dict_[count]['currency'] = p
