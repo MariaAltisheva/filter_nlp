@@ -1,6 +1,7 @@
 import sqlite3
-from lists import list_city, list_type_auto, list_type_cargo, list_payment, valuta
+from lists import list_city, list_type_auto, list_type_cargo, list_payment, valuta, tuple_smile
 import datetime
+import  re
 
 start_time = datetime.datetime.now()
 
@@ -16,6 +17,7 @@ count = 1
 # Обработка результатов
 dict_ = {}
 list_ = []
+list_spam = []
 # while True:
 for row in cur:
     # print(row)
@@ -43,9 +45,14 @@ for row in cur:
     dict_[count]['cargo_danger'] = None
     string = ''.join(row)
     string = string.lower()
-    city_list_detect = string.replace('-', ' ')
-    city_list_detect = city_list_detect.replace('\n', ' ')
-    city_list_detect = city_list_detect.split()
+    city_string = string.replace('-', ' ')
+    city_string = city_string.replace('\n', ' ')
+    for i in tuple_smile:
+        if i in city_string:
+            city_string = city_string.replace(i, '')
+    # print(city_list_detect)
+    city_list_detect = city_string.split()
+    # print(city_list_detect)
 
     for c in city_list_detect:
         for c2 in list_city:
@@ -55,6 +62,9 @@ for row in cur:
             else:
                 dict_[count]['departure_city'] = None
         if dict_[count]['departure_city']:
+            break
+        else:
+            list_spam.append(row)
             break
     try:
         index_c = city_list_detect.index(dict_[count]['departure_city'])
@@ -82,27 +92,40 @@ for row in cur:
         if j in string:
             dict_[count]['type_cargo'] = j
             break
-        else:
-            dict_[count]['type_cargo'] = None
+        # else:
+        #     dict_[count]['type_cargo'] = None
     for k in list_payment:
         if k in string:
             dict_[count]['prepayment'] = k
             break
-        else:
-            dict_[count]['prepayment'] = None
+        # else:
+        #     dict_[count]['prepayment'] = None
     for p in valuta:
         if p in string:
             dict_[count]['currency'] = p
             break
-        else:
-            dict_[count]['currency'] = None
+        # else:
+        #     dict_[count]['currency'] = None
 
+    # фильтр для нахождения номера телефона, состоящего из 9 или 12 цифр
+    pattern = r'\d{9,12}'
+    match = re.search(pattern, string)
+    if match:
+        dict_[count]['phone_num'] = match.group()
     values_list = tuple(dict_[count].values())
     list_.append(values_list)
+
+    # if values_list == (count, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None):
+    #     list_spam.append(row)
+
+
+
     count += 1
 
-print(list_)
 
+
+# print(list_)
+# print(list_spam)
 
 # Закрытие соединения с базой данных
 conn.commit()
