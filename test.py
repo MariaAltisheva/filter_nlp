@@ -43,19 +43,33 @@ for row in cur:
     dict_[count]['cargo_danger'] = None
     string = ''.join(row)
     string = string.lower()
-    city_list_detect = string.split(' ' or '-')
-    # print(city_list_detect)
+    city_list_detect = string.replace('-', ' ')
+    city_list_detect = city_list_detect.replace('\n', ' ')
+    city_list_detect = city_list_detect.split()
+
     for c in city_list_detect:
-        # print(c.lower())
         for c2 in list_city:
             if c.find(c2) >= 0:
-                # print(c2, c)
-                dict_[count]['departure_city'] = c2
+                dict_[count]['departure_city'] = c # можно поставить c2 - будет в более адекватном виде название города
                 break
             else:
                 dict_[count]['departure_city'] = None
         if dict_[count]['departure_city']:
             break
+    try:
+        index_c = city_list_detect.index(dict_[count]['departure_city'])
+        # print(index_c)
+        for h in range(index_c + 1, len(city_list_detect)):
+            for c2 in list_city:
+                if city_list_detect[h].find(c2) >= 0:
+                    dict_[count]['destination_city'] = city_list_detect[h]
+                    break
+            if dict_[count]['destination_city']:
+                break
+
+    except:
+        continue
+
 
     for i in list_type_auto:
         if i in string:
